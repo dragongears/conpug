@@ -1,19 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline">
-        <span class="font-weight-light">Con</span>
-        <span>PUG</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-toolbar>
+    <navbar></navbar>
 
     <v-content>
       <router-view/>
@@ -23,9 +10,12 @@
 
 <script>
 
+import Navbar from './components/Navbar'
+
 export default {
   name: 'App',
   components: {
+    Navbar
   },
   data () {
     return {
