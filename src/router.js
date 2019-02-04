@@ -27,17 +27,23 @@ const router = new Router({
   ]
 })
 
+// router guards
 router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-  if (requiresAuth && !currentUser) {
-    next('login')
-  }
-  else if (!requiresAuth && currentUser) {
-    next('home')
-  }
-  else {
+  // check to see if route has auth guard
+  if (to.matched.some(rec => rec.meta.requiresAuth)){
+    // check auth state of user
+    let user = firebase.auth().currentUser
+    if (user) {
+      // User is signed in. Proceed to route
+      next()
+    } else {
+      // No user is signed in. Redirect to login
+      next({
+        name: 'Login'
+      })
+    }
+  } else {
+    // if route is not guarded by auth, proceed
     next()
   }
 })
