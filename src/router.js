@@ -15,6 +15,10 @@ const router = new Router({
       component: Home
     },
     {
+      path: '/home',
+      redirect: '/'
+    },
+    {
       path: '/signup',
       name: 'Signup',
       component: Signup

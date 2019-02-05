@@ -12,7 +12,6 @@
       <li v-if="user"><a>{{ user.email }}</a></li>
       <li v-if="user"><a @click="logout">Logout</a></li>
     </ul>
-
     <v-btn
         flat
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
@@ -25,23 +24,27 @@
 
 <script>
   import firebase from 'firebase'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Navbar',
     data(){
       return{
-        user: null
+        // user: null
       }
+    },
+    computed: {
+      ...mapState(['user'])
     },
     created(){
       // let user = firebase.auth().currentUser
-      firebase.auth().onAuthStateChanged((user) => {
-        if(user){
-          this.user = user
-        } else {
-          this.user = null
-        }
-      })
+      // firebase.auth().onAuthStateChanged((user) => {
+      //   if(user){
+      //     this.user = user
+      //   } else {
+      //     this.user = null
+      //   }
+      // })
     },
     methods: {
       logout(){
