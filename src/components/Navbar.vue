@@ -9,7 +9,7 @@
     <ul class="right">
       <li v-if="!user"><router-link :to="{ name: 'signup' }">Sign Up</router-link></li>
       <li v-if="!user"><router-link :to="{ name: 'login' }">Login</router-link></li>
-      <li v-if="user"><a>{{ user.email }}</a></li>
+      <li v-if="user"><router-link :to="{ name: 'profile' }">{{ userProfile.alias }}</router-link></li>
       <li v-if="user"><a @click="logout">Logout</a></li>
     </ul>
     <v-btn
