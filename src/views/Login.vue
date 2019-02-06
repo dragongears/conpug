@@ -4,7 +4,7 @@
       <v-flex xs12 sm8 md6>
         <v-card class="elevation-12">
           <v-card-title>
-            Sign In
+            Login
           </v-card-title>
           <v-card-text>
             <v-form

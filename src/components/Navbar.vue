@@ -1,23 +1,23 @@
 <template>
   <v-toolbar app>
     <v-toolbar-title class="headline">
-      <span class="font-weight-light">Con</span>
-      <span>PUG</span>
+      <v-btn flat large to="home" class="logo">
+        <span class="font-weight-light">Con</span>
+        PUG
+      </v-btn>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-
-    <ul class="right">
-      <li v-if="!user"><router-link :to="{ name: 'signup' }">Sign Up</router-link></li>
-      <li v-if="!user"><router-link :to="{ name: 'login' }">Login</router-link></li>
-      <li v-if="user"><router-link :to="{ name: 'profile' }">{{ userProfile.alias }}</router-link></li>
-      <li v-if="user"><a @click="logout">Logout</a></li>
-    </ul>
-    <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-    >
-      <span class="mr-2">Latest Release</span>
+    <v-btn v-if="!user" flat to="signup">
+      <span class="mr-2">Sign Up</span>
+    </v-btn>
+    <v-btn v-if="!user" flat to="login">
+      <span class="mr-2">Login</span>
+    </v-btn>
+    <v-btn v-if="user" flat to="profile">
+      <span class="mr-2">{{ userProfile.alias }}</span>
+    </v-btn>
+    <v-btn v-if="user" flat @click="logout">
+      <span class="mr-2">Logout</span>
     </v-btn>
   </v-toolbar>
 </template>
@@ -38,7 +38,7 @@
     methods: {
       logout(){
         firebase.auth().signOut().then(() => {
-          this.$router.push({ name: 'login' })
+          this.$router.push({ name: 'home' })
         })
       }
     }
@@ -46,5 +46,8 @@
 </script>
 
 <style scoped>
-
+.logo {
+  font-size: 28px;
+  font-weight: normal;
+}
 </style>
