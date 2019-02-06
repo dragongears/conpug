@@ -10,10 +10,28 @@ var config = {
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
 };
 
-const firebaseApp = firebase.initializeApp(config);
+const firebaseApp = firebase.initializeApp(config)
+const db = firebaseApp.firestore()
 
 firebase.auth().onAuthStateChanged((user) => {
-  store.commit('storeUser', user)
+  store.commit('setUser', user)
+
+  if (user) {
+    let ref = db.collection('users')
+
+    // current user
+    ref.where('user_id', '==', firebase.auth().currentUser.uid).get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          let userProfile = doc.data()
+          userProfile.id = doc.id
+
+          store.commit('setUserProfile', userProfile)
+        })
+      })
+  } else {
+    store.commit('setUserProfile', null)
+  }
 })
 
-export default firebaseApp.firestore()
+export default db

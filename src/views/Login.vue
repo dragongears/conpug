@@ -68,15 +68,18 @@
         this.feedback = ''
       },
       login() {
-        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-          (user) => {
-            console.dir(user)
-            this.$router.replace('home')
-          },
-          (err) => {
-            this.feedback = err.message
-          }
-        )
+        if (this.email && this.password){
+          this.feedback = null
+          firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+            .then(() => {
+              this.$router.replace({ name: 'profile' })
+            })
+            .catch(err => {
+              this.feedback = err.message
+            })
+        } else {
+          this.feedback = 'Please fill in both fields'
+        }
       }
     }
   }

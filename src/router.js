@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import firebase from 'firebase'
 import Home from './views/Home.vue'
-import Signup from './views/Signup.vue'
+import SignUp from './views/SignUp.vue'
 import Login from './views/Login.vue'
+import Profile from './views/Profile.vue'
 
 Vue.use(Router)
 
@@ -20,13 +21,21 @@ const router = new Router({
     },
     {
       path: '/signup',
-      name: 'Signup',
-      component: Signup
+      name: 'signup',
+      component: SignUp
     },
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: Login
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -43,7 +52,7 @@ router.beforeEach((to, from, next) => {
     } else {
       // No user is signed in. Redirect to login
       next({
-        name: 'Login'
+        name: 'login'
       })
     }
   } else {

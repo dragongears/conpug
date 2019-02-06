@@ -15,13 +15,16 @@
                   v-model="email"
                   label="Email"
                   required
-                  @input="clearFeedback"
               ></v-text-field>
               <v-text-field
                   v-model="password"
                   label="Password"
                   required
-                  @input="clearFeedback"
+              ></v-text-field>
+              <v-text-field
+                  v-model="alias"
+                  label="Alias"
+                  required
               ></v-text-field>
             </v-form>
             <p>
@@ -54,26 +57,54 @@
 
 <script>
   import firebase from 'firebase'
+  import db from '@/firebase/init'
+  import slugify from 'slugify'
 
   export default {
     name: 'SignUp',
     data() {
       return {
         email: '',
-        password: ''
+        password: '',
+        alias: '',
+        slug: '',
+        feedback: ''
       };
     },
     methods: {
       signUp: function() {
-        firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
-          (user) => {
-            console.dir(user)
-            this.$router.replace('home')
-          },
-          (err) => {
-            alert(`Sign up error: ${err.message}`)
-          }
-        )
+        if(this.alias && this.email && this.password){
+          this.feedback = null
+          this.slug = slugify(this.alias, {
+            replacement: '-',
+            remove: /[$*_+~.()'"!\-:@]/g,
+            lower: true
+          })
+          let ref = db.collection('users').doc(this.slug)
+          ref.get()
+            .then(doc => {
+              if (doc.exists){
+                this.feedback = 'This alias already exists'
+              } else {
+                // this alias does not yet exists in the db
+                firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+                  .then(credentials => {
+                    ref.set({
+                      alias: this.alias,
+                      user_id: credentials.user.uid
+                    })
+                  })
+                  .then(() => {
+                    this.$router.push({ name: 'home' })
+                  })
+                  .catch(err => {
+                    this.feedback = err.message
+                  })
+              }
+            })
+        } else {
+          this.feedback = 'Please fill in all fields'
+        }
       }
     }
   }
