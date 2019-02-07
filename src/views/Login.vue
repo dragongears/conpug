@@ -15,13 +15,11 @@
                   v-model="email"
                   label="Email"
                   required
-                  @input="clearFeedback"
               ></v-text-field>
               <v-text-field
                   v-model="password"
                   label="Password"
                   required
-                  @input="clearFeedback"
               ></v-text-field>
             </v-form>
             <p>
@@ -64,9 +62,6 @@
       }
     },
     methods: {
-      clearFeedback() {
-        this.feedback = ''
-      },
       login() {
         if (this.email && this.password){
           this.feedback = null

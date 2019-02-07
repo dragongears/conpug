@@ -1,9 +1,14 @@
 <template>
-  <v-toolbar app>
-    <v-toolbar-title class="headline">
-      <v-btn flat large to="home" class="logo">
-        <span class="font-weight-light">Con</span>
-        PUG
+  <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp"
+             color="blue darken-3"
+             dark
+             app
+             fixed
+  >
+    <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-btn flat large to="home" class="logo hidden-sm-and-down">
+        <span class="font-weight-light">Con</span>PUG
       </v-btn>
     </v-toolbar-title>
     <v-spacer></v-spacer>
@@ -14,7 +19,7 @@
       <span class="mr-2">Login</span>
     </v-btn>
     <v-btn v-if="user" flat to="profile">
-      <span class="mr-2">{{ userProfile.alias }}</span>
+      <span v-if="userProfile" class="mr-2">{{ userProfile.alias }}</span>
     </v-btn>
     <v-btn v-if="user" flat @click="logout">
       <span class="mr-2">Logout</span>
@@ -27,12 +32,16 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Navbar',
+    name: 'NavBar',
     data(){
       return{
       }
     },
     computed: {
+      drawer: {
+        get() { return this.$store.state.drawer; },
+        set(value) { this.$store.commit('setDrawer', value); },
+      },
       ...mapState(['user', 'userProfile'])
     },
     methods: {
