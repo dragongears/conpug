@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import SignUp from './views/SignUp.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
+import Activities from './views/Activities.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,14 @@ const router = new Router({
       path: '/profile',
       name: 'profile',
       component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/activities',
+      name: 'activities',
+      component: Activities,
       meta: {
         requiresAuth: true
       }

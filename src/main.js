@@ -3,7 +3,7 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import '@/firebase/init'
+import './firebase/init'
 import firebase from 'firebase'
 
 Vue.config.productionTip = false

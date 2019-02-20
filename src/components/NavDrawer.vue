@@ -1,30 +1,25 @@
 <template>
   <v-navigation-drawer
-      v-model="drawer"
-      :clipped="$vuetify.breakpoint.lgAndUp"
       fixed
+      :clipped="$vuetify.breakpoint.mdAndUp"
       app
+      v-model="drawer"
   >
-    <v-toolbar flat class="transparent">
-      <v-list class="pa-0">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg">
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title v-if="userProfile">{{ userProfile.alias }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-toolbar>
     <v-list dense>
+      <v-list-tile v-if="userProfile" avatar @click="">
+        <v-list-tile-avatar>
+          <img :src="require('../assets/conpug.png')">
+        </v-list-tile-avatar>
+        <v-list-tile-content>
+          <v-list-tile-title v-if="userProfile">{{ userProfile.alias }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
       <template v-for="item in items">
         <v-layout
-            v-if="item.heading"
-            :key="item.heading"
             row
+            v-if="item.heading"
             align-center
+            :key="item.heading"
         >
           <v-flex xs6>
             <v-subheader v-if="item.heading">
@@ -37,8 +32,8 @@
         </v-layout>
         <v-list-group
             v-else-if="item.children"
-            :key="item.text"
             v-model="item.model"
+            :key="item.text"
             :prepend-icon="item.model ? item.icon : item['icon-alt']"
             append-icon=""
         >
@@ -52,6 +47,7 @@
           <v-list-tile
               v-for="(child, i) in item.children"
               :key="i"
+              @click=""
           >
             <v-list-tile-action v-if="child.icon">
               <v-icon>{{ child.icon }}</v-icon>
@@ -63,7 +59,7 @@
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
-        <v-list-tile v-else :key="item.text">
+        <v-list-tile v-else @click="item.action" :key="item.text">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -82,21 +78,27 @@
 <script>
   import { mapState } from 'vuex'
 
+  function noop () {
+    console.log(`noop`)
+  }
+
+
   export default {
     name: 'NavDrawer',
     data() {
       return {
         items: [
-          { icon: 'map', text: 'Map' },
+          { icon: 'event', text: 'Activities', action: this.activitiesAction },
+          { icon: 'map', text: 'Map', action: noop },
           {
             icon: 'keyboard_arrow_up',
             'icon-alt': 'keyboard_arrow_down',
             text: 'Friends',
             model: true,
             children: [
-              { text: 'Friend 1' },
-              { text: 'Friend 2' },
-              { text: 'Friend 3' },
+              { text: 'Friend 1', action: noop },
+              { text: 'Friend 2', action: noop },
+              { text: 'Friend 3', action: noop },
               { icon: 'add', text: 'Add friend' }
             ]
           },
@@ -106,15 +108,15 @@
             text: 'Interests',
             model: false,
             children: [
-              { text: 'Interest 1' },
-              { text: 'Interest 2' },
-              { text: 'Interest 3' },
+              { text: 'Interest 1', action: noop },
+              { text: 'Interest 2', action: noop },
+              { text: 'Interest 3', action: noop },
               { icon: 'add', text: 'Add interest' }
             ]
           },
-          { icon: 'settings', text: 'Settings' },
-          { icon: 'chat_bubble', text: 'Send feedback' },
-          { icon: 'help', text: 'Help' }
+          { icon: 'settings', text: 'Settings', action: noop },
+          { icon: 'chat_bubble', text: 'Send feedback', action: noop },
+          { icon: 'help', text: 'Help', action: noop }
         ]
       }
     },
@@ -124,6 +126,12 @@
         set(value) { this.$store.commit('setDrawer', value); },
       },
       ...mapState(['user', 'userProfile'])
+    },
+    methods: {
+      activitiesAction () {
+        console.log(`activites action`)
+        this.$router.push({ name: 'activities' })
+      }
     }
   }
 </script>

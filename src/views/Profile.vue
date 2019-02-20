@@ -57,7 +57,7 @@
     >
       <v-icon>add</v-icon>
     </v-btn>
-    <v-dialog v-model="dialog" width="800px">
+    <v-dialog v-model="dialog">
       <v-card>
         <v-card-title
             class="grey lighten-4 py-4 title"
