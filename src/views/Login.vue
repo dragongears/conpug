@@ -15,11 +15,13 @@
                   v-model="email"
                   label="Email"
                   required
+                  :rules="[v => !!v || 'Email is required']"
               ></v-text-field>
               <v-text-field
                   v-model="password"
                   label="Password"
                   required
+                  :rules="[v => !!v || 'Password is required']"
               ></v-text-field>
             </v-form>
             <p>
@@ -63,7 +65,7 @@
     },
     methods: {
       login() {
-        if (this.email && this.password){
+        if (this.$refs.form.validate()){
           this.feedback = null
           firebase.auth().signInWithEmailAndPassword(this.email, this.password)
             .then(() => {
@@ -72,8 +74,6 @@
             .catch(err => {
               this.feedback = err.message
             })
-        } else {
-          this.feedback = 'Please fill in both fields'
         }
       }
     }

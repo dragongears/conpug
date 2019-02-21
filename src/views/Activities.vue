@@ -46,14 +46,14 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-dialog>
+    <v-dialog v-model="dialog">
       <v-btn fab bottom right fixed dark color="pink" slot="activator"><v-icon>add</v-icon></v-btn>
       <v-card>
         <v-card-title>
           <h2>Add a New Project</h2>
         </v-card-title>
         <v-card-text>
-          <v-form class="px-3">
+          <v-form @submit.prevent="submit" class="px-3">
             <v-container grid-list-sm class="pa-4">
               <v-layout row wrap>
                 <v-flex xs12 align-center justify-space-between>
@@ -61,7 +61,7 @@
                     <v-text-field
                         v-model="dialogData.name"
                         prepend-icon="business"
-                        placeholder="Activity"
+                        label="Activity"
                         required
                     ></v-text-field>
                   </v-layout>
@@ -86,7 +86,7 @@
                   <v-text-field
                       v-model="dialogData.location"
                       prepend-icon="place"
-                      placeholder="Location"
+                      label="Location"
                       required
                   ></v-text-field>
                 </v-flex>
@@ -94,7 +94,7 @@
                   <v-text-field
                       v-model="dialogData.summary"
                       prepend-icon="short_text"
-                      placeholder="Summary"
+                      label="Summary"
                       required
                   ></v-text-field>
                 </v-flex>
@@ -102,7 +102,7 @@
                   <v-textarea
                       v-model="dialogData.description"
                       prepend-icon="notes"
-                      placeholder="Description"
+                      label="Description"
                       required
                   ></v-textarea>
                 </v-flex>
@@ -110,7 +110,7 @@
             </v-container>
             <v-spacer></v-spacer>
             <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-            <v-btn flat @click="submit">Save</v-btn>
+            <v-btn flat type="submit" :disabled="!formIsValid">Save</v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -119,6 +119,7 @@
 </template>
 
 <script>
+  import spacetime from 'spacetime'
   import { mapState } from 'vuex'
   import DatePicker from '@/components/DatePicker'
   import TimePicker from '@/components/TimePicker'
@@ -132,23 +133,45 @@
     data() {
       return {
         active: null,
+        dialog: false,
         dialogData: {
-          name: null,
-          summary: null,
-          description: null,
-          startDate: null,
-          startTime: null,
-          endDate: null,
-          endTime: null
+          name: '',
+          location: '',
+          summary: '',
+          description: '',
+          startDate: spacetime.now().format('{year}-{month-pad}-{date-pad}'),
+          startTime: spacetime.now().format('time'),
+          endDate: spacetime.now().format('{year}-{month-pad}-{date-pad}'),
+          endTime: spacetime.now().format('time')
         }
       }
     },
     methods: {
       submit() {
+        const payload = {
+          name: this.dialogData.name,
+          location: this.dialogData.location,
+          summary: this.dialogData.summary,
+          description: this.dialogData.description,
+          startDateTime: spacetime(this.dialogData.startDate).time(this.dialogData.startTime).format('iso'),
+          endDateTime: spacetime(this.dialogData.endDate).time(this.dialogData.endTime).format('iso')
+        }
         console.log(`Submit`)
+        console.log(payload.startDateTime.toString())
+        console.log(payload.endDateTime.toString())
+        console.dir(payload)
       }
     },
     computed: {
+      formIsValid () {
+        return this.dialogData.name !== '' &&
+          this.dialogData.summary !== '' &&
+          this.dialogData.description !== '' &&
+          this.dialogData.startDate !== '' &&
+          this.dialogData.startTime !== '' &&
+          this.dialogData.endDate !== '' &&
+          this.dialogData.endTime !== ''
+      },
       ...mapState(['userProfile'])
     }
   }

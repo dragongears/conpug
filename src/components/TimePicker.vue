@@ -6,7 +6,7 @@
       :return-value.sync="time"
       lazy
   >
-    <v-text-field
+    <v-text-field tabindex=-1
         slot="activator"
         :value="formattedTime"
         :label="label"

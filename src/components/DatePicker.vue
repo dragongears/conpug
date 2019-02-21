@@ -4,7 +4,7 @@
       :close-on-content-click="false"
       lazy
   >
-    <v-text-field
+    <v-text-field tabindex=-1
         slot="activator"
         :value="formattedDate"
         :label="label"

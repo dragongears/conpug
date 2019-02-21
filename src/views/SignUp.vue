@@ -15,16 +15,19 @@
                   v-model="email"
                   label="Email"
                   required
+                  :rules="[v => !!v || 'Email is required']"
               ></v-text-field>
               <v-text-field
                   v-model="password"
                   label="Password"
                   required
+                  :rules="[v => !!v || 'Password is required']"
               ></v-text-field>
               <v-text-field
                   v-model="alias"
                   label="Alias"
                   required
+                  :rules="[v => !!v || 'Alias is required']"
               ></v-text-field>
             </v-form>
             <p>
@@ -73,7 +76,7 @@
     },
     methods: {
       signUp: function() {
-        if(this.alias && this.email && this.password){
+        if(this.$refs.form.validate()){
           this.feedback = null
           this.slug = slugify(this.alias, {
             replacement: '-',
@@ -102,8 +105,6 @@
                   })
               }
             })
-        } else {
-          this.feedback = 'Please fill in all fields'
         }
       }
     }
