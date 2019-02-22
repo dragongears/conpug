@@ -156,10 +156,7 @@
           startDateTime: spacetime(this.dialogData.startDate).time(this.dialogData.startTime).format('iso'),
           endDateTime: spacetime(this.dialogData.endDate).time(this.dialogData.endTime).format('iso')
         }
-        console.log(`Submit`)
-        console.log(payload.startDateTime.toString())
-        console.log(payload.endDateTime.toString())
-        console.dir(payload)
+        this.$store.dispatch('createActivity', payload)
       }
     },
     computed: {
@@ -173,6 +170,9 @@
           this.dialogData.endTime !== ''
       },
       ...mapState(['userProfile'])
+    },
+    created() {
+      this.$store.dispatch('loadActivities')
     }
   }
 </script>
