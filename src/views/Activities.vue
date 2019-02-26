@@ -2,48 +2,45 @@
   <v-container fluid fill-height>
     <v-layout v-if="userProfile" justify-center>
       <v-flex xs10>
-        <v-toolbar>
-          <v-toolbar-title>{{userProfile.alias}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items class="hidden-sm-and-down">
-            <v-btn flat>Link One</v-btn>
-            <v-btn flat>Link Two</v-btn>
-            <v-btn flat>Link Three</v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card color="cyan darken-2">
-          <v-card-title class="subheading">
-            Activities
-          </v-card-title>
-          <v-card-text>
-            <v-tabs v-model="active" >
-              <v-tab ripple >
-                Attending
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
+
+        <v-card>
+          <v-container
+              fluid
+              grid-list-lg
+          >
+            <v-layout row wrap>
+              <v-flex xs12 v-for="(activity, idx) in activities" :key="idx">
+                <v-card @click="selectActivity(activity.id)">
+                  <v-card-title>
+                    <span class="headline">{{activity.name}}</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <p v-if="sameDate">
+                      <v-icon>event</v-icon>{{activity.startDateTime | date-time}} - {{activity.endDateTime | time}}
+                    </p>
+                    <p v-else>
+                      <v-icon>event</v-icon>{{activity.startDateTime | date-time}} - {{activity.endDateTime | date-time}}
+                    </p>
+                    <p>
+                      <v-icon>place</v-icon>{{activity.location}}
+                    </p>
+                    <p>
+                      <v-icon>short_text</v-icon>{{activity.summary}}
+                    </p>
+                    <p v-if="activity.organizers.includes(userProfile.id)">
+                      Organizer
+                    </p>
+                    <p v-if="activity.participants.includes(userProfile.id)">
+                      Participant
+                    </p>
+                  </v-card-text>
                 </v-card>
-              </v-tab-item>
-              <v-tab ripple >
-                Interested
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab ripple >
-                All
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs>
-          </v-card-text>
+              </v-flex>
+
+            </v-layout>
+          </v-container>
         </v-card>
+
       </v-flex>
     </v-layout>
     <v-dialog v-model="dialog">
@@ -115,6 +112,20 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-snackbar
+        v-model="snackbar"
+        :color="snackbarColor"
+        :multi-line="true"
+    >
+      {{ snackbarText }}
+      <v-btn
+          dark
+          flat
+          @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -134,6 +145,9 @@
       return {
         active: null,
         dialog: false,
+        snackbar: false,
+        snackbarText: '',
+        snackbarColor: 'Info',
         dialogData: {
           name: '',
           location: '',
@@ -147,6 +161,12 @@
       }
     },
     methods: {
+      selectActivity(id) {
+        console.log(`click ${id}`)
+      },
+      sameDate() {
+        spacetime(this.activity.startDateTime).isSame(spacetime(this.activity.endDateTime), 'date')
+      },
       submit() {
         const payload = {
           name: this.dialogData.name,
@@ -154,9 +174,25 @@
           summary: this.dialogData.summary,
           description: this.dialogData.description,
           startDateTime: spacetime(this.dialogData.startDate).time(this.dialogData.startTime).format('iso'),
-          endDateTime: spacetime(this.dialogData.endDate).time(this.dialogData.endTime).format('iso')
+          endDateTime: spacetime(this.dialogData.endDate).time(this.dialogData.endTime).format('iso'),
+          organizers: [this.userProfile.id],
+          participants: [this.userProfile.id]
         }
+
         this.$store.dispatch('createActivity', payload)
+          .then(() => {
+            this.snackbarColor = 'success'
+            this.snackbarText = 'Activity created.'
+            this.snackbar = true
+          })
+          .catch(err => {
+            console.log(err.message)
+            this.snackbarColor = 'error'
+            this.snackbarText = `The activity could not be created: ${err.message}`
+            this.snackbar = true
+          })
+
+        this.dialog = false
       }
     },
     computed: {
@@ -169,7 +205,10 @@
           this.dialogData.endDate !== '' &&
           this.dialogData.endTime !== ''
       },
-      ...mapState(['userProfile'])
+      ...mapState({
+        userProfile: 'userProfile',
+        activities: 'loadedActivities'
+      })
     },
     created() {
       this.$store.dispatch('loadActivities')

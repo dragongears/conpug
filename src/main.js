@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import './firebase/init'
 import firebase from 'firebase'
+import spacetime from 'spacetime'
 
 Vue.config.productionTip = false
 
@@ -19,6 +20,16 @@ let app = null
 // }
 //
 // firebase.initializeApp(config)
+
+Vue.filter('date-time', function (value) {
+  if (!value) return ''
+  return spacetime(value).format('nice-full')
+})
+
+Vue.filter('time', function (value) {
+  if (!value) return ''
+  return spacetime(value).format('time')
+})
 
 // wait for firebase auth to init before creating the app
 firebase.auth().onAuthStateChanged(() => {

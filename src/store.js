@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import firebase from 'firebase'
 import db from './firebase/init'
 
 Vue.use(Vuex)
@@ -35,46 +34,46 @@ export default new Vuex.Store({
   },
   actions: {
     loadActivities ({commit}) {
-      commit('setLoading', true)
-      db.collection('activities').get()
-        .then((querySnapshot) => {
-          const activities = []
-          querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`)
-            const obj = doc.data()
-            activities.push({
-              id: doc.id,
-              name: obj.name,
-              location: obj.location,
-              summary: obj.summary,
-              description: obj.description,
-              startDateTime: obj.startDateTime,
-              endDateTime: obj.endDateTime
+      return new Promise((resolve, reject) => {
+        commit('setLoading', true)
+        db.collection('activities').get()
+          .then((querySnapshot) => {
+            const activities = []
+            querySnapshot.forEach((doc) => {
+              console.dir(doc.data())
+              const obj = doc.data()
+              obj.id = doc.id
+              activities.push(obj)
             })
+            commit('setLoadedActivities', activities)
+            commit('setLoading', false)
+            resolve()
           })
-          commit('setLoadedActivities', activities)
-          commit('setLoading', false)
-        })
-        .catch((error) => {
-          console.log(error)
-          commit('setLoadedActivities', [])
-          commit('setLoading', false)
-        })
+          .catch((error) => {
+            console.log(error)
+            commit('setLoadedActivities', [])
+            commit('setLoading', false)
+            reject(error)
+          })
+      })
     },
     createActivity ({commit}, payload) {
-      db.collection('activities').add(payload)
-        .then((data) => {
-          const key = data.key
-          commit('addActivity', {
-            ...payload,
-            id: key
+      return new Promise((resolve, reject) => {
+        db.collection('activities').add(payload)
+          .then((data) => {
+            const key = data.key
+            commit('addActivity', {
+              ...payload,
+              id: key
+            })
+            resolve()
           })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
+          .catch((error) => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    }
   },
   getters: {
     loadedActivities (state) {
