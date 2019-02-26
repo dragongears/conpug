@@ -6,7 +6,7 @@
       v-model="drawer"
   >
     <v-list dense>
-      <v-list-tile v-if="userProfile" avatar @click="">
+      <v-list-tile v-if="userProfile" avatar>
         <v-list-tile-avatar>
           <img :src="require('../assets/conpug.png')">
         </v-list-tile-avatar>
@@ -47,7 +47,6 @@
           <v-list-tile
               v-for="(child, i) in item.children"
               :key="i"
-              @click=""
           >
             <v-list-tile-action v-if="child.icon">
               <v-icon>{{ child.icon }}</v-icon>

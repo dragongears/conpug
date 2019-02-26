@@ -48,9 +48,10 @@ const router = new Router({
       }
     },
     {
-      path: '/activity',
+      path: '/activities/:id',
       name: 'activity',
       component: Activity,
+      props: true,
       meta: {
         requiresAuth: true
       }

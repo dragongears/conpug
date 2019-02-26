@@ -23,6 +23,9 @@ export default {
     return {
       //
     }
+  },
+  created() {
+    this.$store.dispatch('loadActivities')
   }
 }
 </script>

@@ -34,6 +34,12 @@
                       Participant
                     </p>
                   </v-card-text>
+                  <v-card-actions>
+                    <v-btn :to="'/activities/' + activity.id">
+                      View Activity
+                      <v-icon left light>arrow_forward</v-icon>
+                    </v-btn>
+                  </v-card-actions>
                 </v-card>
               </v-flex>
 
@@ -209,9 +215,6 @@
         userProfile: 'userProfile',
         activities: 'loadedActivities'
       })
-    },
-    created() {
-      this.$store.dispatch('loadActivities')
     }
   }
 </script>

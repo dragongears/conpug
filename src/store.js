@@ -81,6 +81,13 @@ export default new Vuex.Store({
         return activityA.date > activityB.date
       })
     },
+    loadedActivity (state) {
+      return (activityId) => {
+        return state.loadedActivities.find((activity) => {
+          return activity.id === activityId
+        })
+      }
+    },
     user (state) {
       return state.user
     },
