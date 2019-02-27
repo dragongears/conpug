@@ -11,37 +11,12 @@
             <v-btn flat>Link Three</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card color="cyan darken-2">
+        <v-card>
           <v-card-title class="subheading">
             Activities
           </v-card-title>
           <v-card-text>
-            <v-tabs v-model="active" >
-              <v-tab ripple >
-                Attending
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab ripple >
-                Interested
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab ripple >
-                All
-              </v-tab>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>Test</v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs>
+            <activities-list></activities-list>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -125,9 +100,13 @@
 
 <script>
   import { mapState } from 'vuex'
+  import ActivitiesList from '@/components/ActivitiesList'
 
   export default {
     name: 'profile',
+    components: {
+      ActivitiesList
+    },
     data() {
       return {
         active: null,

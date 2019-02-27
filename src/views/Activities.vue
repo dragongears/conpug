@@ -2,51 +2,7 @@
   <v-container fluid fill-height>
     <v-layout v-if="userProfile" justify-center>
       <v-flex xs10>
-
-        <v-card>
-          <v-container
-              fluid
-              grid-list-lg
-          >
-            <v-layout row wrap>
-              <v-flex xs12 v-for="(activity, idx) in activities" :key="idx">
-                <v-card @click="selectActivity(activity.id)">
-                  <v-card-title>
-                    <span class="headline">{{activity.name}}</span>
-                  </v-card-title>
-                  <v-card-text>
-                    <p v-if="sameDate">
-                      <v-icon>event</v-icon>{{activity.startDateTime | date-time}} - {{activity.endDateTime | time}}
-                    </p>
-                    <p v-else>
-                      <v-icon>event</v-icon>{{activity.startDateTime | date-time}} - {{activity.endDateTime | date-time}}
-                    </p>
-                    <p>
-                      <v-icon>place</v-icon>{{activity.location}}
-                    </p>
-                    <p>
-                      <v-icon>short_text</v-icon>{{activity.summary}}
-                    </p>
-                    <p v-if="activity.organizers.includes(userProfile.id)">
-                      Organizer
-                    </p>
-                    <p v-if="activity.participants.includes(userProfile.id)">
-                      Participant
-                    </p>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn :to="'/activities/' + activity.id">
-                      View Activity
-                      <v-icon left light>arrow_forward</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-flex>
-
-            </v-layout>
-          </v-container>
-        </v-card>
-
+        <activities-list></activities-list>
       </v-flex>
     </v-layout>
     <v-dialog v-model="dialog">
@@ -138,12 +94,14 @@
 <script>
   import spacetime from 'spacetime'
   import { mapState } from 'vuex'
+  import ActivitiesList from '@/components/ActivitiesList'
   import DatePicker from '@/components/DatePicker'
   import TimePicker from '@/components/TimePicker'
 
   export default {
     name: 'activities',
     components: {
+      ActivitiesList,
       DatePicker,
       TimePicker
     },
