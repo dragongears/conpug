@@ -1,9 +1,9 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout v-if="userProfile" justify-center>
+    <v-layout v-if="profile" justify-center>
       <v-flex xs10>
         <v-toolbar>
-          <v-toolbar-title>{{userProfile.alias}}</v-toolbar-title>
+          <v-toolbar-title>{{profile.alias}}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items class="hidden-sm-and-down">
             <v-btn flat>Link One</v-btn>
@@ -104,17 +104,28 @@
 
   export default {
     name: 'profile',
+    props: ['id'],
     components: {
       ActivitiesList
     },
     data() {
       return {
+        profile: null,
         active: null,
         dialog: false
       }
     },
     computed: {
       ...mapState(['userProfile'])
+    },
+    created() {
+      this.$store.dispatch('loadProfile', this.id)
+        .then((profile) => {
+          this.profile = profile
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
     }
   }
 </script>

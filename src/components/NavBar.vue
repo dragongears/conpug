@@ -16,7 +16,7 @@
     <v-btn v-if="!user" flat to="login">
       <span class="mr-2">Login</span>
     </v-btn>
-    <v-btn v-if="user" flat to="profile">
+    <v-btn v-if="user && userProfile" flat :to="'/profiles/' + userProfile.id">
       <span v-if="userProfile" class="mr-2">{{ userProfile.alias }}</span>
     </v-btn>
     <v-btn v-if="user" flat @click="logout">

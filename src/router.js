@@ -32,9 +32,10 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/profile',
+      path: '/profiles/:id',
       name: 'profile',
       component: Profile,
+      props: true,
       meta: {
         requiresAuth: true
       }
