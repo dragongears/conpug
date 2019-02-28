@@ -16,7 +16,7 @@
             Activities
           </v-card-title>
           <v-card-text>
-            <activities-list></activities-list>
+            <activities-list :organizer="profile.id" :participant="profile.id"></activities-list>
           </v-card-text>
         </v-card>
       </v-flex>

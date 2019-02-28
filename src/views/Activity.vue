@@ -63,7 +63,7 @@
     props: ['id'],
     methods: {
       sameDate() {
-        spacetime(this.activity.startDateTime).isSame(spacetime(this.activity.endDateTime), 'date')
+        return spacetime(this.activity.startDateTime).isSame(spacetime(this.activity.endDateTime), 'date')
       }
     },
     computed: {

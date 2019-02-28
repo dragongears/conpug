@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import SignUp from './views/SignUp.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
+import Profiles from './views/Profiles.vue'
 import Activities from './views/Activities.vue'
 import Activity from './views/Activity.vue'
 
@@ -30,6 +31,14 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/profiles',
+      name: 'profiles',
+      component: Profiles,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/profiles/:id',

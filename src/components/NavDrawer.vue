@@ -88,6 +88,7 @@
       return {
         items: [
           { icon: 'event', text: 'Activities', action: this.activitiesAction },
+          { icon: 'face', text: 'People', action: this.profilesAction },
           { icon: 'map', text: 'Map', action: noop },
           {
             icon: 'keyboard_arrow_up',
@@ -128,8 +129,10 @@
     },
     methods: {
       activitiesAction () {
-        console.log(`activites action`)
         this.$router.push({ name: 'activities' })
+      },
+      profilesAction () {
+        this.$router.push({ name: 'profiles' })
       }
     }
   }

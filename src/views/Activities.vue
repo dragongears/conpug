@@ -2,7 +2,7 @@
   <v-container fluid fill-height>
     <v-layout v-if="userProfile" justify-center>
       <v-flex xs10>
-        <activities-list></activities-list>
+        <activities-list :organizer="userProfile.id" :participant="userProfile.id"></activities-list>
       </v-flex>
     </v-layout>
     <v-dialog v-model="dialog">

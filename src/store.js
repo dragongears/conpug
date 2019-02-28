@@ -26,14 +26,17 @@ export default new Vuex.Store({
     setUserProfile(state, payload) {
       state.userProfile = payload
     },
+    setLoadedProfiles (state, payload) {
+      state.loadedProfiles = payload
+    },
+    addProfile (state, payload) {
+      state.loadedProfiles.push(payload)
+    },
     setLoadedActivities (state, payload) {
       state.loadedActivities = payload
     },
     addActivity (state, payload) {
       state.loadedActivities.push(payload)
-    },
-    addProfile (state, payload) {
-      state.loadedProfiles.push(payload)
     }
   },
   actions: {
@@ -45,8 +48,8 @@ export default new Vuex.Store({
 
         // return the profile from state.loadedProfiles array
         if (profile) {
-          console.log('Profile data from Vuex store')
           resolve(profile)
+          return
         }
 
         // get the profile from the 'users' database collection
@@ -59,17 +62,13 @@ export default new Vuex.Store({
             if (doc.exists) {
               let profile = {...doc.data(), ...{id: profileId}}
               // add profile to loadedProfiles
-              console.log('Commit profile from db to Vuex store')
               commit('addProfile', profile)
-              console.log('Profile data from db:', doc.data());
               resolve(profile)
             } else {
-              console.log('No such user profile');
               reject(new Error('No such user profile'))
             }
           })
           .catch(function(error) {
-            console.log('Error getting user profile:', error);
             commit('setLoading', false)
             reject(error)
           });
@@ -78,11 +77,10 @@ export default new Vuex.Store({
     loadProfiles ({commit}) {
       return new Promise((resolve, reject) => {
         commit('setLoading', true)
-        db.collection('profiles').get()
+        db.collection('users').get()
           .then((querySnapshot) => {
             const profiles = []
             querySnapshot.forEach((doc) => {
-              console.dir(doc.data())
               const obj = doc.data()
               obj.id = doc.id
               profiles.push(obj)
@@ -92,7 +90,6 @@ export default new Vuex.Store({
             resolve()
           })
           .catch((error) => {
-            console.log(error)
             commit('setLoadedProfiles', [])
             commit('setLoading', false)
             reject(error)
@@ -106,7 +103,6 @@ export default new Vuex.Store({
           .then((querySnapshot) => {
             const activities = []
             querySnapshot.forEach((doc) => {
-              console.dir(doc.data())
               const obj = doc.data()
               obj.id = doc.id
               activities.push(obj)
@@ -116,7 +112,6 @@ export default new Vuex.Store({
             resolve()
           })
           .catch((error) => {
-            console.log(error)
             commit('setLoadedActivities', [])
             commit('setLoading', false)
             reject(error)
