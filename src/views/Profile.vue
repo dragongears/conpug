@@ -1,25 +1,103 @@
 <template>
   <v-container fluid fill-height>
     <v-layout v-if="profile" justify-center>
-      <v-flex xs10>
-        <v-toolbar>
-          <v-toolbar-title>{{profile.alias}}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-toolbar-items class="hidden-sm-and-down">
-            <v-btn flat>Link One</v-btn>
-            <v-btn flat>Link Two</v-btn>
-            <v-btn flat>Link Three</v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
+
+      <v-flex xs12 sm6>
         <v-card>
-          <v-card-title class="subheading">
-            Activities
-          </v-card-title>
-          <v-card-text>
-            <activities-list :organizer="profile.id" :participant="profile.id"></activities-list>
-          </v-card-text>
+          <v-img :aspect-ratio="16/9" :src="require('../assets/conpug.png')">
+            <v-layout pa-2 column fill-height class="lightbox white--text">
+              <v-card-title>
+                <v-btn dark icon>
+                  <v-icon>chevron_left</v-icon>
+                </v-btn>
+
+                <v-spacer></v-spacer>
+
+                <v-btn dark icon class="mr-3">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+
+                <v-btn dark icon>
+                  <v-icon>more_vert</v-icon>
+                </v-btn>
+              </v-card-title>
+              <v-spacer></v-spacer>
+              <v-flex shrink>
+                <div class="display-1">{{profile.alias}}</div>
+                <div class="headline">{{profile.name}}</div>
+              </v-flex>
+            </v-layout>
+          </v-img>
+
+          <!--<v-list two-line>-->
+            <!--<v-list-tile @click="">-->
+              <!--<v-list-tile-action>-->
+                <!--<v-icon color="indigo">phone</v-icon>-->
+              <!--</v-list-tile-action>-->
+
+              <!--<v-list-tile-content>-->
+                <!--<v-list-tile-title>(650) 555-1234</v-list-tile-title>-->
+                <!--<v-list-tile-sub-title>Mobile</v-list-tile-sub-title>-->
+              <!--</v-list-tile-content>-->
+
+              <!--<v-list-tile-action>-->
+                <!--<v-icon>chat</v-icon>-->
+              <!--</v-list-tile-action>-->
+            <!--</v-list-tile>-->
+
+            <!--<v-list-tile @click="">-->
+              <!--<v-list-tile-action></v-list-tile-action>-->
+
+              <!--<v-list-tile-content>-->
+                <!--<v-list-tile-title>(323) 555-6789</v-list-tile-title>-->
+                <!--<v-list-tile-sub-title>Work</v-list-tile-sub-title>-->
+              <!--</v-list-tile-content>-->
+
+              <!--<v-list-tile-action>-->
+                <!--<v-icon>chat</v-icon>-->
+              <!--</v-list-tile-action>-->
+            <!--</v-list-tile>-->
+
+            <!--<v-divider inset></v-divider>-->
+
+            <!--<v-list-tile @click="">-->
+              <!--<v-list-tile-action>-->
+                <!--<v-icon color="indigo">mail</v-icon>-->
+              <!--</v-list-tile-action>-->
+
+              <!--<v-list-tile-content>-->
+                <!--<v-list-tile-title>aliconnors@example.com</v-list-tile-title>-->
+                <!--<v-list-tile-sub-title>Personal</v-list-tile-sub-title>-->
+              <!--</v-list-tile-content>-->
+            <!--</v-list-tile>-->
+
+            <!--<v-list-tile @click="">-->
+              <!--<v-list-tile-action></v-list-tile-action>-->
+
+              <!--<v-list-tile-content>-->
+                <!--<v-list-tile-title>ali_connors@example.com</v-list-tile-title>-->
+                <!--<v-list-tile-sub-title>Work</v-list-tile-sub-title>-->
+              <!--</v-list-tile-content>-->
+            <!--</v-list-tile>-->
+
+            <!--<v-divider inset></v-divider>-->
+
+            <!--<v-list-tile @click="">-->
+              <!--<v-list-tile-action>-->
+                <!--<v-icon color="indigo">location_on</v-icon>-->
+              <!--</v-list-tile-action>-->
+
+              <!--<v-list-tile-content>-->
+                <!--<v-list-tile-title>1400 Main Street</v-list-tile-title>-->
+                <!--<v-list-tile-sub-title>Orlando, FL 79938</v-list-tile-sub-title>-->
+              <!--</v-list-tile-content>-->
+            <!--</v-list-tile>-->
+          <!--</v-list>-->
+
+          <activities-list :organizer="profile.id" :participant="profile.id"></activities-list>
         </v-card>
       </v-flex>
+
     </v-layout>
     <v-btn
         fab
@@ -118,18 +196,30 @@
     computed: {
       ...mapState(['userProfile'])
     },
+    methods: {
+      loadProfile(id) {
+        this.$store.dispatch('loadProfile', id)
+          .then((profile) => {
+            this.profile = profile
+          })
+          .catch(err => {
+            console.log(err.message)
+          })
+      }
+    },
     created() {
-      this.$store.dispatch('loadProfile', this.id)
-        .then((profile) => {
-          this.profile = profile
-        })
-        .catch(err => {
-          console.log(err.message)
-        })
+      this.loadProfile(this.id)
+    },
+    beforeRouteUpdate (to, from, next) {
+      this.loadProfile(to.params.id)
+      next()
     }
   }
 </script>
 
 <style scoped>
-
+  .lightbox {
+    box-shadow: 0 0 20px inset rgba(0, 0, 0, 0.2);
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 144px);
+  }
 </style>

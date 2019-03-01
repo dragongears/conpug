@@ -69,7 +69,7 @@
           this.feedback = null
           firebase.auth().signInWithEmailAndPassword(this.email, this.password)
             .then(() => {
-              this.$router.replace({ name: 'profile' })
+              // this.$router.replace({ name: 'profile', params: { id: this.slug }  })
             })
             .catch(err => {
               this.feedback = err.message

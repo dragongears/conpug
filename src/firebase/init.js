@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import store from '../store'
+import router from '../router'
 
 var config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -27,10 +28,12 @@ firebase.auth().onAuthStateChanged((user) => {
           userProfile.id = doc.id
 
           store.commit('setUserProfile', userProfile)
+          router.replace({name: 'profile', params: { id: doc.id }})
         })
       })
   } else {
     store.commit('setUserProfile', null)
+    router.replace({name: 'home'})
   }
 })
 

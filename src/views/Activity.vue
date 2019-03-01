@@ -26,6 +26,9 @@
                     <p>
                       <v-icon>short_text</v-icon>{{activity.summary}}
                     </p>
+                    <p>
+                      <v-icon>notes</v-icon>{{activity.description}}
+                    </p>
                     <p v-if="activity.organizers.includes(userProfile.id)">
                       Organizer
                     </p>

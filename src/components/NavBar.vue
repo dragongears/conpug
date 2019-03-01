@@ -45,7 +45,7 @@
     methods: {
       logout(){
         firebase.auth().signOut().then(() => {
-          this.$router.push({ name: 'home' })
+          // this.$router.push({ name: 'home' })
         })
       }
     }

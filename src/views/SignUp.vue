@@ -29,6 +29,12 @@
                   required
                   :rules="[v => !!v || 'Alias is required']"
               ></v-text-field>
+              <v-text-field
+                  v-model="name"
+                  label="Name"
+                  required
+                  :rules="[v => !!v || 'Name is required']"
+              ></v-text-field>
             </v-form>
             <p>
               Or
@@ -69,6 +75,7 @@
       return {
         email: '',
         password: '',
+        name: '',
         alias: '',
         slug: '',
         feedback: ''
@@ -93,12 +100,13 @@
                 firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                   .then(credentials => {
                     ref.set({
+                      name: this.name,
                       alias: this.alias,
                       user_id: credentials.user.uid
                     })
                   })
                   .then(() => {
-                    this.$router.push({ name: 'home' })
+                    // this.$router.push({ name: 'profile', params: { id: this.slug } })
                   })
                   .catch(err => {
                     this.feedback = err.message
