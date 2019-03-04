@@ -29,6 +29,23 @@
             </v-layout>
           </v-img>
 
+          <v-card-title>
+            <v-flex>
+              <div class="subheading">About me</div>
+              <div>This is some text where I can tell you a little bit about myself.</div>
+            </v-flex>
+
+            <v-flex>
+              <div class="subheading">Interests</div>
+              <div>Here are some things that I find interesting.</div>
+            </v-flex>
+
+            <v-flex>
+              <div class="subheading">Friends</div>
+              <div>This is a list of my ConPUG friends.</div>
+            </v-flex>
+          </v-card-title>
+
           <!--<v-list two-line>-->
             <!--<v-list-tile @click="">-->
               <!--<v-list-tile-action>-->

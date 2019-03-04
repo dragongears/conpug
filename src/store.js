@@ -122,10 +122,10 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         db.collection('activities').add(payload)
           .then((data) => {
-            const key = data.key
+            const id = data.id
             commit('addActivity', {
               ...payload,
-              id: key
+              id: id
             })
             resolve()
           })
