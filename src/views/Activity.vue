@@ -9,7 +9,7 @@
           >
             <v-layout row wrap>
               <v-flex xs12 >
-                <v-card @click="selectActivity(activity.id)">
+                <v-card>
                   <v-card-title>
                     <span class="headline">{{activity.name}}</span>
                   </v-card-title>
@@ -36,14 +36,8 @@
                       Participant
                     </p>
                   </v-card-text>
-                  <v-card-actions>
-                    <v-btn>
-                      Edit Activity
-                    </v-btn>
-                  </v-card-actions>
                 </v-card>
               </v-flex>
-
             </v-layout>
           </v-container>
         </v-card>
@@ -54,17 +48,25 @@
         </p>
       </v-flex>
     </v-layout>
+    <activity-dialog v-if="isOrganizer" :activity="activity" @activity-deleted="activityDeleted"></activity-dialog>
   </v-container>
 </template>
 
 <script>
   import { mapState } from 'vuex'
   import spacetime from 'spacetime'
+  import ActivityDialog from '@/components/ActivityDialog'
 
   export default {
     name: 'Activity',
+    components: {
+      ActivityDialog
+    },
     props: ['id'],
     methods: {
+      activityDeleted() {
+        this.$router.push({ name: 'activities' })
+      },
       sameDate() {
         return spacetime(this.activity.startDateTime).isSame(spacetime(this.activity.endDateTime), 'date')
       }
@@ -74,10 +76,10 @@
         return this.$store.getters.loadedActivity(this.id)
       },
       isOrganizer () {
-        return this.activity.organizers.includes(this.userProfile.id)
+        return this.activity && this.activity.organizers.includes(this.userProfile.id) || false
       },
       isParticipant () {
-        return this.activity.participants.includes(this.userProfile.id)
+        return this.activity && this.activity.participants.includes(this.userProfile.id) || false
       },
       ...mapState({
         userProfile: 'userProfile'

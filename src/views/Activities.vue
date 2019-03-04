@@ -5,19 +5,19 @@
         <activities-list :organizer="userProfile.id" :participant="userProfile.id"></activities-list>
       </v-flex>
     </v-layout>
-    <new-activity></new-activity>
+    <activity-dialog></activity-dialog>
   </v-container>
 </template>
 
 <script>
   import { mapState } from 'vuex'
   import ActivitiesList from '@/components/ActivitiesList'
-  import NewActivity from '@/components/NewActivity'
+  import ActivityDialog from '@/components/ActivityDialog'
 
   export default {
     name: 'activities',
     components: {
-      NewActivity,
+      ActivityDialog,
       ActivitiesList
     },
     data() {
@@ -25,9 +25,6 @@
       }
     },
     methods: {
-      selectActivity(id) {
-        console.log(`click ${id}`)
-      }
     },
     computed: {
       ...mapState({

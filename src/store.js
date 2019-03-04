@@ -37,6 +37,17 @@ export default new Vuex.Store({
     },
     addActivity (state, payload) {
       state.loadedActivities.push(payload)
+    },
+    modifyActivity (state, payload) {
+      state.loadedActivities = state.loadedActivities.filter((activity) => {
+        return activity.id !== payload.id
+      })
+      state.loadedActivities.push(payload)
+    },
+    removeActivity (state, payload) {
+      state.loadedActivities = state.loadedActivities.filter((activity) => {
+        return activity.id !== payload.id
+      })
     }
   },
   actions: {
@@ -120,12 +131,45 @@ export default new Vuex.Store({
     },
     createActivity ({commit}, payload) {
       return new Promise((resolve, reject) => {
-        db.collection('activities').add(payload)
+        db.collection('activities').add(payload.activity)
           .then((data) => {
             const id = data.id
             commit('addActivity', {
-              ...payload,
+              ...payload.activity,
               id: id
+            })
+            resolve()
+          })
+          .catch((error) => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
+    updateActivity ({commit}, payload) {
+      return new Promise((resolve, reject) => {
+        let ref = db.collection('activities').doc(payload.id)
+        ref.update(payload.activity)
+          .then(() => {
+            commit('modifyActivity', {
+              ...payload.activity,
+              id: payload.id
+            })
+            resolve()
+          })
+          .catch((error) => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
+    deleteActivity ({commit}, payload) {
+      return new Promise((resolve, reject) => {
+        let ref = db.collection('activities').doc(payload)
+        ref.delete()
+          .then(() => {
+            commit('removeActivity', {
+              id: payload
             })
             resolve()
           })
