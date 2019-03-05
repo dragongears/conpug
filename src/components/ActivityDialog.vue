@@ -156,8 +156,9 @@
             description: this.dialogData.description,
             startDateTime: spacetime(this.dialogData.startDate).time(this.dialogData.startTime).format('iso'),
             endDateTime: spacetime(this.dialogData.endDate).time(this.dialogData.endTime).format('iso'),
-            organizers: [this.userProfile.id],
-            participants: [this.userProfile.id]
+            organizers: this.activity && this.activity.organizers || [this.userProfile.id],
+            participants: this.activity && this.activity.participants || [this.userProfile.id],
+            creationDateTime: this.activity && this.activity.creationDateTime || spacetime.now().format('iso')
           }
         }
 

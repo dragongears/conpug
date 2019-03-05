@@ -30,7 +30,21 @@ export default new Vuex.Store({
       state.loadedProfiles = payload
     },
     addProfile (state, payload) {
-      state.loadedProfiles.push(payload)
+      if (!state.loadedProfiles.includes((profile) => {
+        return profile.id === payload.id
+      })) {
+        state.loadedProfiles.push(payload)
+      }
+    },
+    modifyProfile (state, payload) {
+      let idx = state.loadedProfiles.findIndex((profile) => {
+        return profile.id === payload.id
+      })
+      if (idx === -1) {
+        state.loadedProfiles.push(payload)
+      } else {
+        state.loadedProfiles[idx] = payload
+      }
     },
     setLoadedActivities (state, payload) {
       state.loadedActivities = payload
@@ -51,6 +65,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    updateUserProfile (context, userProfile) {
+      return new Promise((resolve, reject) => {
+        let {id, ...user} = userProfile
+        let ref = db.collection('users').doc(id)
+        ref.update(user)
+          .then(() => {
+            resolve()
+          })
+          .catch((error) => {
+            console.log(error)
+            reject(error)
+          })
+      })
+    },
     loadProfile ({commit, state}, profileId) {
       return new Promise((resolve, reject) => {
         let profile = state.loadedProfiles.find((profile) => {

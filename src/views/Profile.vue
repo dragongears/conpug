@@ -116,23 +116,16 @@
       </v-flex>
 
     </v-layout>
-    <v-btn
-        fab
-        bottom
-        right
-        color="pink"
-        dark
-        fixed
-        @click="dialog = !dialog"
-    >
-      <v-icon>add</v-icon>
-    </v-btn>
-    <v-dialog v-model="dialog">
+    <v-dialog v-if="profile && profile.id === userProfile.id" v-model="dialog">
+      <v-btn fab bottom right fixed dark color="pink" slot="activator">
+        <v-icon>edit</v-icon>
+      </v-btn>
+
       <v-card>
         <v-card-title
             class="grey lighten-4 py-4 title"
         >
-          Create contact
+          Edit profile
         </v-card-title>
         <v-container grid-list-sm class="pa-4">
           <v-layout row wrap>

@@ -1,6 +1,7 @@
 import firebase from 'firebase'
 import store from '../store'
 import router from '../router'
+import spacetime from 'spacetime'
 
 var config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -26,8 +27,10 @@ firebase.auth().onAuthStateChanged((user) => {
         snapshot.forEach(doc => {
           let userProfile = doc.data()
           userProfile.id = doc.id
+          userProfile.mostRecentLoginDateTime = spacetime.now().format('iso')
 
           store.commit('setUserProfile', userProfile)
+          store.dispatch('updateUserProfile', userProfile)
           router.replace({name: 'profile', params: { id: doc.id }})
         })
       })
@@ -35,6 +38,16 @@ firebase.auth().onAuthStateChanged((user) => {
     store.commit('setUserProfile', null)
     router.replace({name: 'home'})
   }
+
+  db.collection('users')
+    .onSnapshot(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        let profile = doc.data()
+        profile.id = doc.id
+        store.commit('modifyProfile', profile)
+        console.log(`Updated locally from Firestore: ${profile.name}`)
+      })
+    });
 })
 
 export default db

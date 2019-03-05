@@ -68,6 +68,7 @@
   import firebase from 'firebase'
   import db from '@/firebase/init'
   import slugify from 'slugify'
+  import spacetime from 'spacetime'
 
   export default {
     name: 'SignUp',
@@ -102,7 +103,9 @@
                     ref.set({
                       name: this.name,
                       alias: this.alias,
-                      user_id: credentials.user.uid
+                      user_id: credentials.user.uid,
+                      creationDateTime: spacetime.now().format('iso'),
+                      mostRecentLoginDateTime: spacetime.now().format('iso')
                     })
                   })
                   .then(() => {
