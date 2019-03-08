@@ -2,6 +2,19 @@
   <v-container fluid fill-height>
     <v-layout v-if="userProfile" justify-center>
       <v-flex xs10>
+        <v-toolbar>
+          <v-toolbar-title>Activities</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-flex xs8 sm5 md3>
+            <v-overflow-btn
+                :items="dropdownParticipation"
+                :label="participation.text"
+                hide-details
+                flat
+                v-model="participation"
+            ></v-overflow-btn>
+          </v-flex>
+        </v-toolbar>
         <activities-list :organizer="userProfile.id" :participant="userProfile.id"></activities-list>
       </v-flex>
     </v-layout>
@@ -22,6 +35,13 @@
     },
     data() {
       return {
+        participation: {text: 'All', value: 'all'},
+        dropdownParticipation: [
+          { text: 'All', value: 'all' },
+          { text: 'Interested', value: 'interested' },
+          { text: 'Attending', value: 'attending' },
+          { text: 'Running', value: 'running' }
+        ]
       }
     },
     methods: {
