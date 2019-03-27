@@ -4,22 +4,11 @@
 
       <v-flex xs12 sm6>
         <v-card>
-          <v-img :aspect-ratio="16/9" :src="require('../assets/conpug.png')">
+          <v-img :aspect-ratio="16/9" :src="profilePicUrl">
             <v-layout pa-2 column fill-height class="lightbox white--text">
               <v-card-title>
-                <v-btn dark icon>
-                  <v-icon>chevron_left</v-icon>
-                </v-btn>
-
                 <v-spacer></v-spacer>
-
-                <v-btn dark icon class="mr-3">
-                  <v-icon>edit</v-icon>
-                </v-btn>
-
-                <v-btn dark icon>
-                  <v-icon>more_vert</v-icon>
-                </v-btn>
+                <profile-pic-uploader v-if="profile.id === userProfile.id" @downloadURL="getDownloadUrl" :userId="profile.id" class="mb-4"></profile-pic-uploader>
               </v-card-title>
               <v-spacer></v-spacer>
               <v-flex shrink>
@@ -111,6 +100,7 @@
             <!--</v-list-tile>-->
           <!--</v-list>-->
 
+
           <activities-list :organizer="profile.id" :participant="profile.id"></activities-list>
         </v-card>
       </v-flex>
@@ -189,11 +179,13 @@
 <script>
   import { mapState } from 'vuex'
   import ActivitiesList from '@/components/ActivitiesList'
+  import ProfilePicUploader from '@/components/ProfilePicUploader'
 
   export default {
     name: 'profile',
     props: ['id'],
     components: {
+      ProfilePicUploader,
       ActivitiesList
     },
     data() {
@@ -204,9 +196,16 @@
       }
     },
     computed: {
-      ...mapState(['userProfile'])
+      ...mapState(['userProfile']),
+      profilePicUrl () {
+        return this.profile.picUrl || require('../assets/conpug.png')
+      }
     },
     methods: {
+      getDownloadUrl (v) {
+        this.profile.picUrl = v
+        this.$store.dispatch('updateUserProfile', this.profile)
+      },
       loadProfile(id) {
         this.$store.dispatch('loadProfile', id)
           .then((profile) => {

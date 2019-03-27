@@ -8,7 +8,7 @@
             <v-list-tile :key="index" avatar :to="'/profiles/' + profile.id">
               <v-list-tile-avatar>
                 <!--<img :src="profile.avatar">-->
-                <img :src="require('../assets/conpug.png')">
+                <img :src="profile.picUrl || require('../assets/conpug.png')">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="profile.alias"></v-list-tile-title>
