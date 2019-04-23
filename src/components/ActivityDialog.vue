@@ -7,7 +7,7 @@
       </v-btn>
       <v-card>
         <v-card-title>
-          <h2 v-if="!activity">Add a New Activity</h2>
+          <h2 v-if="!activity">Add a New Activity!</h2>
           <h2 v-else>Edit {{activity.name}}</h2>
         </v-card-title>
         <v-card-text>
