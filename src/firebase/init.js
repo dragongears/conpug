@@ -16,11 +16,7 @@ const firebaseApp = firebase.initializeApp(config)
 const db = firebaseApp.firestore()
 
 firebase.auth().onAuthStateChanged((user) => {
-  console.log('onAuthStateChanged()')
-  console.dir(user)
-
   store.commit('setUser', user)
-  console.log('Commit user')
 
   if (user) {
     const ref = db.collection('users')
