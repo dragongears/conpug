@@ -21,6 +21,6 @@
 
 <script>
   export default {
-    name: 'Activity'
+    name: 'home'
   }
 </script>

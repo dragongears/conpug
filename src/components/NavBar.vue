@@ -40,13 +40,12 @@
         get() { return this.$store.state.drawer; },
         set(value) { this.$store.commit('setDrawer', value); },
       },
-      ...mapState(['user', 'userProfile'])
+      ...mapState(['unsubscribe', 'user', 'userProfile'])
     },
     methods: {
       logout(){
-        firebase.auth().signOut().then(() => {
-          // this.$router.push({ name: 'home' })
-        })
+        this.unsubscribe()
+        firebase.auth().signOut()
       }
     }
   }

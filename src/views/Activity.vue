@@ -58,7 +58,7 @@
   import ActivityDialog from '@/components/ActivityDialog'
 
   export default {
-    name: 'Activity',
+    name: 'activity',
     components: {
       ActivityDialog
     },

@@ -27,7 +27,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Profiles',
+    name: 'profiles',
     computed: {
       ...mapState({
         profiles: 'loadedProfiles'

@@ -10,16 +10,20 @@ var config = {
   projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
-};
+}
 
 const firebaseApp = firebase.initializeApp(config)
 const db = firebaseApp.firestore()
 
 firebase.auth().onAuthStateChanged((user) => {
+  console.log('onAuthStateChanged()')
+  console.dir(user)
+
   store.commit('setUser', user)
+  console.log('Commit user')
 
   if (user) {
-    let ref = db.collection('users')
+    const ref = db.collection('users')
 
     // current user
     ref.where('user_id', '==', firebase.auth().currentUser.uid).get()
@@ -34,20 +38,22 @@ firebase.auth().onAuthStateChanged((user) => {
           router.replace({name: 'profile', params: { id: doc.id }})
         })
       })
+    const collection = db.collection('users')
+    const unsubscribe = collection.onSnapshot(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          let profile = doc.data()
+          profile.id = doc.id
+          store.commit('modifyProfile', profile)
+          console.log(`Updated locally from Firestore: ${profile.name}`)
+        })
+      })
+    store.commit('setUnsubscribe', unsubscribe)
+    store.dispatch('loadActivities')
   } else {
+    console.log('No user')
     store.commit('setUserProfile', null)
     router.replace({name: 'home'})
   }
-
-  db.collection('users')
-    .onSnapshot(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        let profile = doc.data()
-        profile.id = doc.id
-        store.commit('modifyProfile', profile)
-        console.log(`Updated locally from Firestore: ${profile.name}`)
-      })
-    });
 })
 
 export default db

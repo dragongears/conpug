@@ -18,14 +18,6 @@ export default {
   components: {
     NavDrawer,
     NavBar
-  },
-  data () {
-    return {
-      //
-    }
-  },
-  created() {
-    this.$store.dispatch('loadActivities')
   }
 }
 </script>

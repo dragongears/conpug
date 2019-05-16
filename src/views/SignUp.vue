@@ -71,7 +71,7 @@
   import spacetime from 'spacetime'
 
   export default {
-    name: 'SignUp',
+    name: 'signup',
     data() {
       return {
         email: '',
@@ -91,15 +91,17 @@
             remove: /[$*_+~.()'"!\-:@]/g,
             lower: true
           })
-          let ref = db.collection('users').doc(this.slug)
-          ref.get()
-            .then(doc => {
-              if (doc.exists){
-                this.feedback = 'This alias already exists'
-              } else {
+
+          fetch(`https://us-central1-dragongears-conpug.cloudfunctions.net/testUserExists?slug=${this.slug}`)
+            .then(response => {
+              return response.json()
+            })
+            .then((res) => {
+              if (!res.exists) {
                 // this alias does not yet exists in the db
                 firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                   .then(credentials => {
+                    let ref = db.collection('users').doc(this.slug)
                     ref.set({
                       name: this.name,
                       alias: this.alias,
@@ -114,8 +116,39 @@
                   .catch(err => {
                     this.feedback = err.message
                   })
+              } else {
+                this.feedback = 'This alias already exists'
               }
             })
+            .catch((err) => {
+              this.feedback = err.message
+            });
+
+          // let ref = db.collection('users').doc(this.slug)
+          // ref.get()
+          //   .then(doc => {
+          //     if (doc.exists){
+          //       this.feedback = 'This alias already exists'
+          //     } else {
+          //       // this alias does not yet exists in the db
+          //       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+          //         .then(credentials => {
+          //           ref.set({
+          //             name: this.name,
+          //             alias: this.alias,
+          //             user_id: credentials.user.uid,
+          //             creationDateTime: spacetime.now().format('iso'),
+          //             mostRecentLoginDateTime: spacetime.now().format('iso')
+          //           })
+          //         })
+          //         .then(() => {
+          //           // this.$router.push({ name: 'profile', params: { id: this.slug } })
+          //         })
+          //         .catch(err => {
+          //           this.feedback = err.message
+          //         })
+          //     }
+          //   })
         }
       }
     }

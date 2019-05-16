@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    unsubscribe: null,
     loading: false,
     drawer: null,
     user: null,
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     loadedProfiles: []
   },
   mutations: {
+    setUnsubscribe(state, payload) {
+      state.unsubscribe = payload
+    },
     setLoading(state, payload) {
       state.loading = payload
     },
@@ -66,6 +70,7 @@ export default new Vuex.Store({
   },
   actions: {
     updateUserProfile (context, userProfile) {
+      console.log('updateUserProfile()')
       return new Promise((resolve, reject) => {
         let {id, ...user} = userProfile
         let ref = db.collection('users').doc(id)
@@ -80,6 +85,7 @@ export default new Vuex.Store({
       })
     },
     loadProfile ({commit, state}, profileId) {
+      console.log('loadProfile()')
       return new Promise((resolve, reject) => {
         let profile = state.loadedProfiles.find((profile) => {
           return profile.id === profileId
@@ -114,6 +120,7 @@ export default new Vuex.Store({
       })
     },
     loadProfiles ({commit}) {
+      console.log('loadProfiles()')
       return new Promise((resolve, reject) => {
         commit('setLoading', true)
         db.collection('users').get()
@@ -136,6 +143,7 @@ export default new Vuex.Store({
       })
     },
     loadActivities ({commit}) {
+      console.log('loadActivities()')
       return new Promise((resolve, reject) => {
         commit('setLoading', true)
         db.collection('activities').get()
@@ -158,6 +166,7 @@ export default new Vuex.Store({
       })
     },
     createActivity ({commit}, payload) {
+      console.log('createActivity()')
       return new Promise((resolve, reject) => {
         db.collection('activities').add(payload.activity)
           .then((data) => {
@@ -175,6 +184,7 @@ export default new Vuex.Store({
       })
     },
     updateActivity ({commit}, payload) {
+      console.log('updateActivity()')
       return new Promise((resolve, reject) => {
         let ref = db.collection('activities').doc(payload.id)
         ref.update(payload.activity)
@@ -192,6 +202,7 @@ export default new Vuex.Store({
       })
     },
     deleteActivity ({commit}, payload) {
+      console.log('deleteActivity()')
       return new Promise((resolve, reject) => {
         let ref = db.collection('activities').doc(payload)
         ref.delete()
@@ -209,6 +220,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    unsubscribe (state) {
+      return state.unsubscribe
+    },
     loadedActivities (state) {
       return state.loadedActivities.sort((activityA, activityB) => {
         return activityA.date > activityB.date
