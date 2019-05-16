@@ -10,6 +10,7 @@
             <v-form
                 ref="form"
                 lazy-validation
+                @keyup.native.enter="signUp"
             >
               <v-text-field
                   v-model="email"
