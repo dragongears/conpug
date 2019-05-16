@@ -8,7 +8,7 @@
     <v-list dense>
       <v-list-tile v-if="userProfile" avatar :to="'/profiles/' + userProfile.id">
         <v-list-tile-avatar>
-          <img :src="require('../assets/conpug.png')">
+          <img :src="userProfile.picUrl || require('../assets/conpug.png')">
         </v-list-tile-avatar>
         <v-list-tile-content>
           <v-list-tile-title v-if="userProfile">{{ userProfile.alias }}</v-list-tile-title>
