@@ -24,16 +24,16 @@
                   :rules="[v => !!v || 'Password is required']"
               ></v-text-field>
               <v-text-field
+                  v-model="name"
+                  label="Full Name"
+                  required
+                  :rules="[v => !!v || 'Name is required']"
+              ></v-text-field>
+              <v-text-field
                   v-model="alias"
                   label="Alias"
                   required
                   :rules="[v => !!v || 'Alias is required']"
-              ></v-text-field>
-              <v-text-field
-                  v-model="name"
-                  label="Name"
-                  required
-                  :rules="[v => !!v || 'Name is required']"
               ></v-text-field>
             </v-form>
             <p>
