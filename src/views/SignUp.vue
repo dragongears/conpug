@@ -107,7 +107,8 @@
                       alias: this.alias,
                       user_id: credentials.user.uid,
                       creationDateTime: spacetime.now().format('iso'),
-                      mostRecentLoginDateTime: spacetime.now().format('iso')
+                      mostRecentLoginDateTime: spacetime.now().format('iso'),
+                      picUrl: null
                     })
                   })
                   .then(() => {

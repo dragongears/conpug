@@ -198,11 +198,13 @@
     computed: {
       ...mapState(['userProfile']),
       profilePicUrl () {
+        console.log('profilePicUrl computed')
         return this.profile.picUrl || require('../assets/conpug.png')
       }
     },
     methods: {
       getDownloadUrl (v) {
+        console.log(`getDownloadUrl: ${v} `)
         this.profile.picUrl = v
         this.$store.dispatch('updateUserProfile', this.profile)
       },
