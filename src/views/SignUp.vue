@@ -102,14 +102,15 @@
                 // this alias does not yet exists in the db
                 firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
                   .then(credentials => {
-                    let ref = db.collection('users').doc(this.slug)
+                    let ref = db.collection('users').doc(credentials.user.uid)
                     ref.set({
                       name: this.name,
                       alias: this.alias,
-                      user_id: credentials.user.uid,
+                      userId: credentials.user.uid,
                       creationDateTime: spacetime.now().format('iso'),
                       mostRecentLoginDateTime: spacetime.now().format('iso'),
-                      picUrl: null
+                      picUrl: null,
+                      slug: this.slug
                     })
                   })
                   .then(() => {
@@ -125,32 +126,6 @@
             .catch((err) => {
               this.feedback = err.message
             });
-
-          // let ref = db.collection('users').doc(this.slug)
-          // ref.get()
-          //   .then(doc => {
-          //     if (doc.exists){
-          //       this.feedback = 'This alias already exists'
-          //     } else {
-          //       // this alias does not yet exists in the db
-          //       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-          //         .then(credentials => {
-          //           ref.set({
-          //             name: this.name,
-          //             alias: this.alias,
-          //             user_id: credentials.user.uid,
-          //             creationDateTime: spacetime.now().format('iso'),
-          //             mostRecentLoginDateTime: spacetime.now().format('iso')
-          //           })
-          //         })
-          //         .then(() => {
-          //           // this.$router.push({ name: 'profile', params: { id: this.slug } })
-          //         })
-          //         .catch(err => {
-          //           this.feedback = err.message
-          //         })
-          //     }
-          //   })
         }
       }
     }

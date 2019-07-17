@@ -28,10 +28,11 @@ exports.testUserExists = functions.https.onRequest((req, res) => {
     // [START sendResponse]
     var db = admin.firestore();
 
-    let ref = db.collection('users').doc(slug)
-    ref.get()
-      .then(doc => {
-        if (doc.exists){
+    let ref = db.collection('users')
+
+    ref.where('slug', '==', slug).get()
+      .then(snapshot => {
+        if (snapshot.size > 0){
           res.status(200).send({"exists": true})
         } else {
           res.status(200).send({"exists": false})

@@ -35,14 +35,14 @@ export default new Vuex.Store({
     },
     addProfile (state, payload) {
       if (!state.loadedProfiles.includes((profile) => {
-        return profile.id === payload.id
+        return profile.userId === payload.userId
       })) {
         state.loadedProfiles.push(payload)
       }
     },
     modifyProfile (state, payload) {
       let idx = state.loadedProfiles.findIndex((profile) => {
-        return profile.id === payload.id
+        return profile.userId === payload.userId
       })
       if (idx === -1) {
         state.loadedProfiles.push(payload)
@@ -72,9 +72,8 @@ export default new Vuex.Store({
     updateUserProfile (context, userProfile) {
       console.log('updateUserProfile()')
       return new Promise((resolve, reject) => {
-        let {id, ...user} = userProfile
-        let ref = db.collection('users').doc(id)
-        ref.update(user)
+        let ref = db.collection('users').doc(userProfile.userId)
+        ref.update(userProfile)
           .then(() => {
             resolve()
           })
@@ -84,11 +83,10 @@ export default new Vuex.Store({
           })
       })
     },
-    loadProfile ({commit, state}, profileId) {
-      console.log('loadProfile()')
+    loadProfile ({commit, state}, profileUserId) {
       return new Promise((resolve, reject) => {
         let profile = state.loadedProfiles.find((profile) => {
-          return profile.id === profileId
+          return profile.userId === profileUserId
         })
 
         // return the profile from state.loadedProfiles array
@@ -99,13 +97,13 @@ export default new Vuex.Store({
 
         // get the profile from the 'users' database collection
         commit('setLoading', true)
-        let ref = db.collection('users').doc(profileId)
+        let ref = db.collection('users').doc(profileUserId)
 
         ref.get()
           .then(function(doc) {
             commit('setLoading', false)
             if (doc.exists) {
-              let profile = {...doc.data(), ...{id: profileId}}
+              let profile = doc.data()
               // add profile to loadedProfiles
               commit('addProfile', profile)
               resolve(profile)
@@ -127,9 +125,7 @@ export default new Vuex.Store({
           .then((querySnapshot) => {
             const profiles = []
             querySnapshot.forEach((doc) => {
-              const obj = doc.data()
-              obj.id = doc.id
-              profiles.push(obj)
+              profiles.push(doc.data())
             })
             commit('setLoadedProfiles', profiles)
             commit('setLoading', false)

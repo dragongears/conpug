@@ -5,7 +5,7 @@
 
         <v-list two-line>
           <template v-for="(profile, index) in profiles">
-            <v-list-tile :key="index" avatar :to="'/profiles/' + profile.id">
+            <v-list-tile :key="index" avatar :to="'/profiles/' + profile.userId">
               <v-list-tile-avatar>
                 <!--<img :src="profile.avatar">-->
                 <img :src="profile.picUrl || require('../assets/conpug.png')">
