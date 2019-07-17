@@ -15,7 +15,7 @@
             ></v-overflow-btn>
           </v-flex>
         </v-toolbar>
-        <activities-list :organizer="userProfile.id" :participant="userProfile.id"></activities-list>
+        <activities-list :organizer="userProfile.slug" :participant="userProfile.slug"></activities-list>
       </v-flex>
     </v-layout>
     <activity-dialog></activity-dialog>

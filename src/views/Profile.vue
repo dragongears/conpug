@@ -8,7 +8,7 @@
             <v-layout pa-2 column fill-height class="lightbox white--text">
               <v-card-title>
                 <v-spacer></v-spacer>
-                <profile-pic-uploader v-if="profile.id === userProfile.id" @downloadURL="getDownloadUrl" :userId="profile.id" class="mb-4"></profile-pic-uploader>
+                <profile-pic-uploader v-if="profile.userId === userProfile.userId" @downloadURL="getDownloadUrl" :userId="profile.userId" class="mb-4"></profile-pic-uploader>
               </v-card-title>
               <v-spacer></v-spacer>
               <v-flex shrink>
@@ -101,12 +101,12 @@
           <!--</v-list>-->
 
 
-          <activities-list :organizer="profile.id" :participant="profile.id"></activities-list>
+          <activities-list :organizer="profile.slug" :participant="profile.slug"></activities-list>
         </v-card>
       </v-flex>
 
     </v-layout>
-    <v-dialog v-if="profile && profile.id === userProfile.id" v-model="dialog">
+    <v-dialog v-if="profile && profile.userId === userProfile.userId" v-model="dialog">
       <v-btn fab bottom right fixed dark color="pink" slot="activator">
         <v-icon>edit</v-icon>
       </v-btn>
@@ -183,7 +183,7 @@
 
   export default {
     name: 'profile',
-    props: ['id'],
+    props: ['userId'],
     components: {
       ProfilePicUploader,
       ActivitiesList
@@ -208,9 +208,10 @@
         this.profile.picUrl = v
         this.$store.dispatch('updateUserProfile', this.profile)
       },
-      loadProfile(id) {
-        this.$store.dispatch('loadProfile', id)
+      loadProfile(userId) {
+        this.$store.dispatch('loadProfile', userId)
           .then((profile) => {
+            console.dir(profile)
             this.profile = profile
           })
           .catch(err => {
@@ -219,10 +220,10 @@
       }
     },
     created() {
-      this.loadProfile(this.id)
+      this.loadProfile(this.userId)
     },
     beforeRouteUpdate (to, from, next) {
-      this.loadProfile(to.params.id)
+      this.loadProfile(to.params.userId)
       next()
     }
   }

@@ -43,7 +43,7 @@ const router = new Router({
       }
     },
     {
-      path: '/profiles/:id',
+      path: '/profiles/:userId',
       name: 'profile',
       component: Profile,
       props: true,

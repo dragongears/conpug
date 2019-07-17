@@ -6,7 +6,7 @@
       v-model="drawer"
   >
     <v-list dense>
-      <v-list-tile v-if="userProfile" avatar :to="'/profiles/' + userProfile.id">
+      <v-list-tile v-if="userProfile" avatar :to="'/profiles/' + userProfile.userId">
         <v-list-tile-avatar>
           <img :src="userProfile.picUrl || require('../assets/conpug.png')">
         </v-list-tile-avatar>

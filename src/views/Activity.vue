@@ -29,10 +29,10 @@
                     <p>
                       <v-icon>notes</v-icon>{{activity.description}}
                     </p>
-                    <p v-if="activity.organizers.includes(userProfile.id)">
+                    <p v-if="activity.organizers.includes(userProfile.slug)">
                       Organizer
                     </p>
-                    <p v-if="activity.participants.includes(userProfile.id)">
+                    <p v-if="activity.participants.includes(userProfile.slug)">
                       Participant
                     </p>
                   </v-card-text>
@@ -76,10 +76,10 @@
         return this.$store.getters.loadedActivity(this.id)
       },
       isOrganizer () {
-        return this.activity && this.activity.organizers.includes(this.userProfile.id) || false
+        return this.activity && this.activity.organizers.includes(this.userProfile.slug) || false
       },
       isParticipant () {
-        return this.activity && this.activity.participants.includes(this.userProfile.id) || false
+        return this.activity && this.activity.participants.includes(this.userProfile.slug) || false
       },
       ...mapState({
         userProfile: 'userProfile'

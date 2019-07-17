@@ -20,25 +20,19 @@ firebase.auth().onAuthStateChanged((user) => {
 
   if (user) {
     const ref = db.collection('users')
-
     // current user
-    ref.where('user_id', '==', firebase.auth().currentUser.uid).get()
+    ref.doc(firebase.auth().currentUser.uid).get()
       .then(snapshot => {
-        snapshot.forEach(doc => {
-          let userProfile = doc.data()
-          userProfile.id = doc.id
-          userProfile.mostRecentLoginDateTime = spacetime.now().format('iso')
-
-          store.commit('setUserProfile', userProfile)
-          store.dispatch('updateUserProfile', userProfile)
-          router.replace({name: 'profile', params: { id: doc.id }})
-        })
+        let userProfile = snapshot.data()
+        userProfile.mostRecentLoginDateTime = spacetime.now().format('iso')
+        store.commit('setUserProfile', userProfile)
+        store.dispatch('updateUserProfile', userProfile)
+        router.replace({name: 'profile', params: { userId: snapshot.id }})
       })
     const collection = db.collection('users')
     const unsubscribe = collection.onSnapshot(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           let profile = doc.data()
-          profile.id = doc.id
           store.commit('modifyProfile', profile)
           console.log(`Updated locally from Firestore: ${profile.name}`)
         })
