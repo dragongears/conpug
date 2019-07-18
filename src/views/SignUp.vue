@@ -62,6 +62,9 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <loading-dialog :visible="dialog">
+      Creating account
+    </loading-dialog>
   </v-container>
 </template>
 
@@ -70,9 +73,13 @@
   import db from '@/firebase/init'
   import slugify from 'slugify'
   import spacetime from 'spacetime'
+  import LoadingDialog from '@/components/LoadingDialog'
 
   export default {
     name: 'signup',
+    components: {
+      LoadingDialog
+    },
     data() {
       return {
         email: '',
@@ -80,7 +87,8 @@
         name: '',
         alias: '',
         slug: '',
-        feedback: ''
+        feedback: '',
+        dialog: false
       };
     },
     methods: {
@@ -92,6 +100,8 @@
             remove: /[$*_+~.()'"!\-:@]/g,
             lower: true
           })
+
+          this.dialog = true
 
           fetch(`https://us-central1-dragongears-conpug.cloudfunctions.net/testUserExists?slug=${this.slug}`)
             .then(response => {
@@ -122,10 +132,12 @@
               } else {
                 this.feedback = 'This alias already exists'
               }
+              this.dialog = false
             })
             .catch((err) => {
+              this.dialog = false
               this.feedback = err.message
-            });
+            })
         }
       }
     }

@@ -49,31 +49,43 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <loading-dialog :visible="dialog">
+      Logging in
+    </loading-dialog>
   </v-container>
 </template>
 
 <script>
   import firebase from 'firebase'
+  import LoadingDialog from '@/components/LoadingDialog'
 
   export default {
     name: 'login',
+    components: {
+      LoadingDialog
+    },
     data() {
       return {
         email: '',
         password: '',
-        feedback: ''
+        feedback: '',
+        dialog: false
       }
     },
     methods: {
       login() {
         if (this.$refs.form.validate()){
           this.feedback = null
+          this.dialog = true
           firebase.auth().signInWithEmailAndPassword(this.email, this.password)
             .then(() => {
               // this.$router.replace({ name: 'profile', params: { id: this.slug }  })
             })
             .catch(err => {
               this.feedback = err.message
+            })
+            .finally(() => {
+              this.dialog = false
             })
         }
       }
