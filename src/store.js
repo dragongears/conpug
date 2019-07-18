@@ -38,6 +38,16 @@ export default new Vuex.Store({
         return profile.userId === payload.userId
       })) {
         state.loadedProfiles.push(payload)
+        state.loadedProfiles.sort(function(a, b){
+          var nameA = a.alias.toLowerCase(), nameB = b.alias.toLowerCase()
+          if (nameA < nameB) //sort string ascending
+            return -1
+          if (nameA > nameB)
+            return 1
+          return 0 //default return value (no sorting)
+        })
+
+
       }
     },
     modifyProfile (state, payload) {
@@ -127,8 +137,18 @@ export default new Vuex.Store({
             querySnapshot.forEach((doc) => {
               profiles.push(doc.data())
             })
+            profiles.sort(function(a, b){
+              var nameA = a.alias.toLowerCase(), nameB = b.alias.toLowerCase()
+              if (nameA < nameB) //sort string ascending
+                return -1
+              if (nameA > nameB)
+                return 1
+              return 0 //default return value (no sorting)
+            })
+
             commit('setLoadedProfiles', profiles)
             commit('setLoading', false)
+
             resolve()
           })
           .catch((error) => {
